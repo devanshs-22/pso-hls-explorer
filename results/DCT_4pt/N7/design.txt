@@ -1,0 +1,64 @@
+DCT_4pt   PSO with N = 7 particles
+
+Resource configuration : 1 adder, 2 multipliers
+
+SCHEDULE (control step x functional unit)
+CS  | A1    | M1    | M2    | step latency
+------------------------------------------
+1   | -     | ×1    | ×2    | 264.9712 ps
+2   | +5    | ×3    | ×4    | 264.9712 ps
+3   | +6    | -     | -     | 66.2428 ps
+4   | +7    | -     | -     | 66.2428 ps
+
+REGISTER ALLOCATION TABLE (as Table 1 of the paper: C0 = inputs, Ck = after control step k)
+                C0    C1    C2    C3    C4    
+Red (R)         V0    V8    V10   V13   V14   
+Green (G)       V1    V9    V12   –     –     
+Indigo (I)      V2    –     V11   V11   –     
+Blue (BL)       V3    –     –     –     –     
+Yellow (Y)      V4    V4    –     –     –     
+Black (B)       V5    V5    –     –     –     
+Violet (V)      V6    V6    –     –     –     
+Pink (P)        V7    V7    –     –     –     
+
+Variables:
+  V0   -> Red       primary input      live over boundaries 0..0
+  V1   -> Green     primary input      live over boundaries 0..0
+  V2   -> Indigo    primary input      live over boundaries 0..0
+  V3   -> Blue      primary input      live over boundaries 0..0
+  V4   -> Yellow    primary input      live over boundaries 0..1
+  V5   -> Black     primary input      live over boundaries 0..1
+  V6   -> Violet    primary input      live over boundaries 0..1
+  V7   -> Pink      primary input      live over boundaries 0..1
+  V8   -> Red       output of op 1     live over boundaries 1..1
+  V9   -> Green     output of op 2     live over boundaries 1..1
+  V10  -> Red       output of op 3     live over boundaries 2..2
+  V11  -> Indigo    output of op 4     live over boundaries 2..3
+  V12  -> Green     output of op 5     live over boundaries 2..2
+  V13  -> Red       output of op 6     live over boundaries 3..3
+  V14  -> Red       output of op 7     live over boundaries 4..4
+
+INTERCONNECT (multiplexers / demultiplexers)
+  A1.in1       2:1 mux
+  A1.in2       3:1 mux
+  M1.in1       2:1 mux
+  M1.in2       2:1 mux
+  M2.in1       2:1 mux
+  M2.in2       2:1 mux
+  Red.in       3:1 mux
+  Green.in     3:1 mux
+  Indigo.in    2:1 mux
+  A1.out       1:2 demux
+  M2.out       1:2 demux
+  Red.out      1:3 demux
+  Green.out    1:3 demux
+  Indigo.out   1:2 demux
+  equivalent 2:1 muxes = 12  (area 7.6680 um^2, NOT included in design area)
+
+METRICS
+  adder       1 x 18.8744 um^2 = 18.8744 um^2
+  multiplier  2 x 75.4976 um^2 = 150.9952 um^2
+  registers   8 x 0.7864 um^2 = 6.2912 um^2
+  Area    = 176.1608 um^2          (Amax = 327.1560)
+  Latency = 662.4280 ps  = 4 control steps  (Lmax = 1126.1276)
+  Cost    = 0.5*(176.1608-327.1560)/327.1560 + 0.5*(662.4280-1126.1276)/1126.1276 = -0.4366517718

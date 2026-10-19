@@ -1,0 +1,44 @@
+iter  0  w=  -    after update: (4A, 5M)=-0.1765  (1A, 1M)=-0.3891  (3A, 3M)=-0.3167
+                 gbest = (1A, 1M) cost -0.389079   t = 0.442 ms
+iter  1  w=0.900  after update: (1A, 3M)=-0.3576  (1A, 1M)=-0.3891  (3A, 1M)=-0.3481
+                 after mutation: (3A, 1M)=-0.3481  (1A, 3M)=-0.3576  (1A, 3M)=-0.3576
+                 gbest = (1A, 1M) cost -0.389079   t = 0.754 ms
+iter  2  w=0.884  after update: (1A, 1M)=-0.3891  (1A, 3M)=-0.3576  (1A, 1M)=-0.3891
+                 after mutation: (1A, 1M)=-0.3891  (2A, 1M)=-0.3686  (1A, 1M)=-0.3891
+                 gbest = (1A, 1M) cost -0.389079   t = 0.916 ms
+iter  3  w=0.867  after update: (1A, 1M)=-0.3891  (2A, 2M)=-0.3749  (1A, 2M)=-0.3954
+                 after mutation: (1A, 1M)=-0.3891  (4A, 4M)=-0.2143  (2A, 1M)=-0.3686
+                 gbest = (1A, 2M) cost -0.395403   t = 1.372 ms
+iter  4  w=0.851  after update: (2A, 1M)=-0.3686  (1A, 2M)=-0.3954  (1A, 2M)=-0.3954
+                 after mutation: (1A, 2M)=-0.3954  (4A, 1M)=-0.3276  (2A, 1M)=-0.3686
+                 gbest = (1A, 2M) cost -0.395403   t = 1.538 ms
+iter  5  w=0.835  after update: (2A, 2M)=-0.3749  (1A, 1M)=-0.3891  (2A, 2M)=-0.3749
+                 after mutation: (2A, 2M)=-0.3749  (1A, 2M)=-0.3954  (2A, 2M)=-0.3749
+                 gbest = (1A, 2M) cost -0.395403   t = 1.555 ms
+iter  6  w=0.818  after update: (1A, 2M)=-0.3954  (1A, 2M)=-0.3954  (2A, 3M)=-0.3371
+                 after mutation: (2A, 1M)=-0.3686  (3A, 3M)=-0.3167  (3A, 2M)=-0.3544
+                 gbest = (1A, 2M) cost -0.395403   t = 1.858 ms
+iter  7  w=0.802  after update: (1A, 4M)=-0.2757  (1A, 1M)=-0.3891  (3A, 3M)=-0.3167
+                 after mutation: (4A, 1M)=-0.3276  (3A, 3M)=-0.3167  (3A, 3M)=-0.3167
+                 gbest = (1A, 2M) cost -0.395403   t = 2.021 ms
+iter  8  w=0.786  after update: (1A, 5M)=-0.2379  (1A, 3M)=-0.3576  (3A, 3M)=-0.3167
+                 after mutation: (4A, 1M)=-0.3276  (4A, 4M)=-0.2143  (3A, 3M)=-0.3167
+                 gbest = (1A, 2M) cost -0.395403   t = 2.179 ms
+iter  9  w=0.769  after update: (1A, 5M)=-0.2379  (1A, 4M)=-0.2757  (2A, 1M)=-0.3686
+                 after mutation: (4A, 1M)=-0.3276  (3A, 2M)=-0.3544  (1A, 2M)=-0.3954
+                 gbest = (1A, 2M) cost -0.395403   t = 2.193 ms
+iter 10  w=0.753  after update: (1A, 5M)=-0.2379  (3A, 4M)=-0.2347  (2A, 1M)=-0.3686
+                 after mutation: (3A, 1M)=-0.3481  (3A, 2M)=-0.3544  (1A, 2M)=-0.3954
+                 gbest = (1A, 2M) cost -0.395403   t = 2.346 ms
+iter 11  w=0.737  after update: (1A, 5M)=-0.2379  (2A, 4M)=-0.2552  (1A, 4M)=-0.2757
+                 after mutation: (2A, 1M)=-0.3686  (1A, 3M)=-0.3576  (4A, 1M)=-0.3276
+                 gbest = (1A, 2M) cost -0.395403   t = 2.502 ms
+iter 12  w=0.720  after update: (1A, 5M)=-0.2379  (1A, 2M)=-0.3954  (1A, 3M)=-0.3576
+                 after mutation: (4A, 1M)=-0.3276  (2A, 2M)=-0.3749  (3A, 1M)=-0.3481
+                 gbest = (1A, 2M) cost -0.395403   t = 2.516 ms
+iter 13  w=0.704  after update: (1A, 5M)=-0.2379  (1A, 3M)=-0.3576  (2A, 5M)=-0.2174
+                 after mutation: (4A, 1M)=-0.3276  (2A, 1M)=-0.3686  (4A, 2M)=-0.3340
+                 gbest = (1A, 2M) cost -0.395403   t = 3.054 ms
+
+Stopped after 13 iterations: global best unchanged for 10 iterations
+Converged at iteration 3: convergence time 1.372 ms, exploration time 3.056 ms

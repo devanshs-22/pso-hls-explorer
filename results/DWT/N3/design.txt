@@ -1,0 +1,87 @@
+DWT   PSO with N = 3 particles
+
+Resource configuration : 1 adder, 2 multipliers
+
+SCHEDULE (control step x functional unit)
+CS  | A1    | M1    | M2    | step latency
+------------------------------------------
+1   | -     | ×1    | ×2    | 264.9712 ps
+2   | +6    | ×3    | ×4    | 264.9712 ps
+3   | +10   | ×5    | -     | 264.9712 ps
+4   | +7    | ×11   | -     | 264.9712 ps
+5   | +12   | -     | -     | 66.2428 ps
+6   | +8    | ×13   | -     | 264.9712 ps
+7   | +14   | -     | -     | 66.2428 ps
+8   | +9    | ×15   | -     | 264.9712 ps
+9   | +16   | -     | -     | 66.2428 ps
+10  | +17   | -     | -     | 66.2428 ps
+
+REGISTER ALLOCATION TABLE (as Table 1 of the paper: C0 = inputs, Ck = after control step k)
+                C0    C1    C2    C3    C4    C5    C6    C7    C8    C9    C10   
+Red (R)         V0    V10   V15   V19   V20   V21   V22   V23   V24   V25   V26   
+Green (G)       V1    V11   V11   V14   V14   V14   V14   V14   V18   V18   –     
+Indigo (I)      V2    –     V12   V12   V16   V16   V17   V17   –     –     –     
+Blue (BL)       V3    –     V13   V13   V13   V13   –     –     –     –     –     
+Yellow (Y)      V4    V4    –     –     –     –     –     –     –     –     –     
+Black (B)       V5    V5    –     –     –     –     –     –     –     –     –     
+Violet (V)      V6    V6    –     –     –     –     –     –     –     –     –     
+Pink (P)        V7    V7    –     –     –     –     –     –     –     –     –     
+Lime (LI)       V8    V8    V8    –     –     –     –     –     –     –     –     
+Olive (O)       V9    V9    V9    –     –     –     –     –     –     –     –     
+
+Variables:
+  V0   -> Red       primary input      live over boundaries 0..0
+  V1   -> Green     primary input      live over boundaries 0..0
+  V2   -> Indigo    primary input      live over boundaries 0..0
+  V3   -> Blue      primary input      live over boundaries 0..0
+  V4   -> Yellow    primary input      live over boundaries 0..1
+  V5   -> Black     primary input      live over boundaries 0..1
+  V6   -> Violet    primary input      live over boundaries 0..1
+  V7   -> Pink      primary input      live over boundaries 0..1
+  V8   -> Lime      primary input      live over boundaries 0..2
+  V9   -> Olive     primary input      live over boundaries 0..2
+  V10  -> Red       output of op 1     live over boundaries 1..1
+  V11  -> Green     output of op 2     live over boundaries 1..2
+  V12  -> Indigo    output of op 3     live over boundaries 2..3
+  V13  -> Blue      output of op 4     live over boundaries 2..5
+  V14  -> Green     output of op 5     live over boundaries 3..7
+  V15  -> Red       output of op 6     live over boundaries 2..2
+  V16  -> Indigo    output of op 7     live over boundaries 4..5
+  V17  -> Indigo    output of op 8     live over boundaries 6..7
+  V18  -> Green     output of op 9     live over boundaries 8..9
+  V19  -> Red       output of op 10    live over boundaries 3..3
+  V20  -> Red       output of op 11    live over boundaries 4..4
+  V21  -> Red       output of op 12    live over boundaries 5..5
+  V22  -> Red       output of op 13    live over boundaries 6..6
+  V23  -> Red       output of op 14    live over boundaries 7..7
+  V24  -> Red       output of op 15    live over boundaries 8..8
+  V25  -> Red       output of op 16    live over boundaries 9..9
+  V26  -> Red       output of op 17    live over boundaries 10..10
+
+INTERCONNECT (multiplexers / demultiplexers)
+  A1.in1       4:1 mux
+  A1.in2       4:1 mux
+  M1.in1       4:1 mux
+  M1.in2       4:1 mux
+  M2.in1       2:1 mux
+  M2.in2       2:1 mux
+  Red.in       3:1 mux
+  Green.in     4:1 mux
+  Indigo.in    3:1 mux
+  Blue.in      2:1 mux
+  A1.out       1:3 demux
+  M1.out       1:3 demux
+  M2.out       1:2 demux
+  Red.out      1:4 demux
+  Green.out    1:3 demux
+  Indigo.out   1:4 demux
+  Blue.out     1:3 demux
+  equivalent 2:1 muxes = 22  (area 14.0580 um^2, NOT included in design area)
+
+METRICS
+  adder       1 x 18.8744 um^2 = 18.8744 um^2
+  multiplier  2 x 75.4976 um^2 = 150.9952 um^2
+  registers   10 x 0.7864 um^2 = 7.8640 um^2
+  Area    = 177.7336 um^2          (Amax = 460.8496)
+  Latency = 1854.7984 ps  = 10 control steps  (Lmax = 2252.2552)
+  Cost    = 0.5*(177.7336-460.8496)/460.8496 + 0.5*(1854.7984-2252.2552)/2252.2552 = -0.3954027518

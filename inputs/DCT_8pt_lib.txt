@@ -1,0 +1,6 @@
+adder(16),0.739pj,18.8744um,66.2428ps,18.6um,70.0ps,1
+subtractor(16),0.739pj,22.0192um,79.3910ps,0
+multiplier(16),9.8pj,75.4976um,264.9712ps,75.2um,270.9712ps,8
+mux2:1,0.1pj,0.6390um,12.7494ps,0
+register 0.7864um, 25.9108ps
+

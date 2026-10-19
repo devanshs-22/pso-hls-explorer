@@ -1,0 +1,89 @@
+# Builds PSO HLS Explorer for Windows and macOS on GitHub's machines, checks that the
+# built app really works (self-test: all six steps, every window, export), and offers the
+# apps as downloads under the run's "Artifacts".
+name: Build desktop app
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Test engine
+        run: |
+          python -m pip install -r requirements.txt
+          python -m unittest
+
+      # ---------------- Windows ----------------
+      - name: Build app folder (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: build_windows.bat
+      - name: Build single-file portable .exe (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: >
+          .venv\Scripts\pyinstaller --noconfirm --onefile --windowed
+          --name "PSO HLS Explorer portable" --icon assets\icon.ico
+          --add-data "inputs;inputs" --exclude-module tkinter
+          --distpath dist-portable --workpath build-portable desktop_app.py
+      - name: Self-test the built app (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          foreach ($exe in @("dist\PSO HLS Explorer\PSO HLS Explorer.exe", "dist-portable\PSO HLS Explorer portable.exe")) {
+            $out = Join-Path $env:RUNNER_TEMP ([IO.Path]::GetFileNameWithoutExtension($exe) -replace ' ', '_')
+            New-Item -ItemType Directory -Force $out | Out-Null
+            $env:PSO_HLS_SELFTEST = $out
+            Start-Process -FilePath $exe -Wait
+            Get-Content (Join-Path $out "selftest.txt")
+            if (-not (Select-String -Path (Join-Path $out "selftest.txt") -Pattern "SELFTEST OK" -Quiet)) { throw "self-test failed for $exe" }
+          }
+      - name: Upload Windows app folder
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PSO-HLS-Explorer-Windows-folder
+          path: dist/
+      - name: Upload Windows portable .exe
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PSO-HLS-Explorer-Windows-portable-exe
+          path: dist-portable/
+
+      # ---------------- macOS ----------------
+      - name: Build app (macOS)
+        if: runner.os == 'macOS'
+        run: ./build_mac.sh
+      - name: Self-test the built app (macOS)
+        if: runner.os == 'macOS'
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          mkdir -p "$RUNNER_TEMP/selftest"
+          PSO_HLS_SELFTEST="$RUNNER_TEMP/selftest" "dist/PSO HLS Explorer.app/Contents/MacOS/PSO HLS Explorer"
+          cat "$RUNNER_TEMP/selftest/selftest.txt"
+          grep -q "SELFTEST OK" "$RUNNER_TEMP/selftest/selftest.txt"
+      - name: Zip macOS app
+        if: runner.os == 'macOS'
+        run: cd dist && ditto -c -k --keepParent "PSO HLS Explorer.app" "PSO-HLS-Explorer-macOS.zip"
+      - name: Upload macOS app
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PSO-HLS-Explorer-macOS
+          path: dist/PSO-HLS-Explorer-macOS.zip
