@@ -48,32 +48,47 @@ def main():
 
 
 def _selftest(app, win, out_dir):
-    """Do all six steps with a sample, open every output window, export, then quit."""
+    """Do all six steps with a sample, open every output window, export, then quit.
+    Every step is logged to selftest.txt; pop-ups are logged instead of waiting for a click,
+    and a watchdog ends the test after 3 minutes so a build machine can never hang on it."""
     from PySide6.QtWidgets import QFileDialog, QMessageBox
+
+    def log(msg):
+        _report(out_dir, msg, append=True)
+
+    QMessageBox.warning = staticmethod(lambda parent, title, text, *a, **k:
+                                       log(f"POP-UP '{title}': {text}") or QMessageBox.StandardButton.Ok)
+    QMessageBox.information = QMessageBox.critical = QMessageBox.warning
+    QMessageBox.question = staticmethod(lambda *a, **k: QMessageBox.StandardButton.Yes)
+    QMessageBox.exec = lambda self: 0
+    QFileDialog.getExistingDirectory = staticmethod(lambda *a, **k: out_dir)
+    QTimer.singleShot(180_000, lambda: (log("SELFTEST TIMEOUT after 3 minutes"), app.exit(2)))
     try:
-        win.load_dfg(sample="DWT")
-        win.load_lib(sample=True)
-        win.run_pso()
-        win.make_schedule()
-        win.make_rat()
-        win.compute_cost()
-        assert win.s.done == {1, 2, 3, 4, 5, 6}, win.s.done
+        steps = [("1 load DFG", lambda: win.load_dfg(sample="DWT")),
+                 ("2 load library", lambda: win.load_lib(sample=True)),
+                 ("3 run PSO", win.run_pso), ("4 schedule", win.make_schedule),
+                 ("5 RAT", win.make_rat), ("6 cost", win.compute_cost)]
+        for n, (name, act) in enumerate(steps, 1):
+            act()
+            assert n in win.s.done, f"step {name} did not finish"
+            log(f"step {name}: ok")
         for key in ("dfg", "lib", "explore", "conv", "compare", "trade", "sched", "rat", "mux", "cost"):
             win.open_output(key)
-            assert key in win.open_windows, key
-        QFileDialog.getExistingDirectory = staticmethod(lambda *a, **k: out_dir)
-        QMessageBox.exec = lambda self: 0
+            assert key in win.open_windows, f"window {key} did not open"
+            log(f"window {key}: ok")
         win.export()
-        assert os.path.exists(os.path.join(out_dir, "DWT_PSO_results", "summary.md"))
-        _report(out_dir, "SELFTEST OK")
+        assert os.path.exists(os.path.join(out_dir, "DWT_PSO_results", "summary.md")), "export missing"
+        log("export: ok")
+        log("SELFTEST OK")
         app.exit(0)
     except Exception:
         import traceback
-        _report(out_dir, "SELFTEST FAILED\n" + traceback.format_exc())
+        log("SELFTEST FAILED\n" + traceback.format_exc())
         app.exit(1)
 
 
-def _report(out_dir, text):
-    print(text, flush=True)
-    with open(os.path.join(out_dir, "selftest.txt"), "w") as f:
+def _report(out_dir, text, append=False):
+    if sys.stdout:                                   # None in a windowed Windows build
+        print(text, flush=True)
+    with open(os.path.join(out_dir, "selftest.txt"), "a" if append else "w", encoding="utf-8") as f:
         f.write(text + "\n")

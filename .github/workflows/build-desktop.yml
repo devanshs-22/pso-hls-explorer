@@ -44,22 +44,27 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: |
+          $failed = @()
           foreach ($exe in @("dist\PSO HLS Explorer\PSO HLS Explorer.exe", "dist-portable\PSO HLS Explorer portable.exe")) {
             $out = Join-Path $env:RUNNER_TEMP ([IO.Path]::GetFileNameWithoutExtension($exe) -replace ' ', '_')
             New-Item -ItemType Directory -Force $out | Out-Null
             $env:PSO_HLS_SELFTEST = $out
-            Start-Process -FilePath $exe -Wait
-            Get-Content (Join-Path $out "selftest.txt")
-            if (-not (Select-String -Path (Join-Path $out "selftest.txt") -Pattern "SELFTEST OK" -Quiet)) { throw "self-test failed for $exe" }
+            Write-Host "=== self-test: $exe"
+            $p = Start-Process -FilePath $exe -PassThru
+            if (-not $p.WaitForExit(300000)) { Stop-Process -Id $p.Id -Force; Write-Host "!!! still running after 5 minutes - killed" }
+            $log = Join-Path $out "selftest.txt"
+            if (Test-Path $log) { Get-Content $log } else { Write-Host "!!! no selftest.txt written" }
+            if (-not ((Test-Path $log) -and (Select-String -Path $log -Pattern "SELFTEST OK" -Quiet))) { $failed += $exe }
           }
+          if ($failed.Count) { throw "self-test failed for: $($failed -join ', ')" }
       - name: Upload Windows app folder
-        if: runner.os == 'Windows'
+        if: always() && runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
           name: PSO-HLS-Explorer-Windows-folder
           path: dist/
       - name: Upload Windows portable .exe
-        if: runner.os == 'Windows'
+        if: always() && runner.os == 'Windows'
         uses: actions/upload-artifact@v4
         with:
           name: PSO-HLS-Explorer-Windows-portable-exe
