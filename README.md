@@ -25,8 +25,9 @@ transformation. Area and delay come from the 15 nm open cell library.
 | **Use the built Mac app** | Double-click `dist/PSO HLS Explorer.app` (you can drag it into Applications). On a different Mac, the first time, right-click → **Open**, because the app is not signed with an Apple developer certificate. |
 | **Run from source (Mac)** | `cd ~/Desktop/PSO_HLS_Project` then `.venv/bin/python desktop_app.py` |
 | **Rebuild the Mac app** | `./build_mac.sh` creates `dist/PSO HLS Explorer.app` |
+| **Use the Windows app** | `windows_build/PSO HLS Explorer (portable).exe` is a single file: copy it to the Windows PC and double-click it (each start takes a few seconds while it unpacks). Or unzip `windows_build/PSO-HLS-Explorer-Windows.zip` and double-click `PSO HLS Explorer.exe` inside the folder (starts faster). The first time, Windows may show **"Windows protected your PC"** because the app isn't signed: click **More info → Run anyway**. |
 | **Build for Windows** | On a Windows PC with Python from python.org, double-click `build_windows.bat`. It creates `dist\PSO HLS Explorer\PSO HLS Explorer.exe`. |
-| **Build for Windows without a Windows PC** | Push the project to GitHub, open the **Actions** tab, run **Build desktop app**, and download the Windows and macOS apps from the run's *Artifacts*. |
+| **Build for Windows without a Windows PC** | The project is on GitHub at https://github.com/devanshs-22/pso-hls-explorer. Open the **Actions** tab, run **Build desktop app**, and download the Windows and macOS apps from the run's *Artifacts*. GitHub builds them on real Windows and macOS machines and runs the app's self-test (all six steps, every window, export) before uploading. |
 
 First-time setup from source: `python3 -m venv .venv`, then
 `.venv/bin/pip install -r requirements.txt -r requirements-app.txt`.

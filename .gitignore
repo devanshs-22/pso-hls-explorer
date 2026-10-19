@@ -8,3 +8,4 @@ assets/icon.iconset/
 dist-portable/
 build-portable/
 .DS_Store
+windows_build/
