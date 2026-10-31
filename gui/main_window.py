@@ -50,10 +50,16 @@ OUTPUTS = [
 ]
 
 
+PROJECT_TITLE = ("Generation of Optimized Hardware Intellectual Property (IP) Designs "
+                 "for Consumer Electronics Applications")
+TEAM = "Devansh Singhal, Deepak Kumar, Dhristi and Kshaunish"
+SUPERVISOR = "Dr. Aditya Anshul"
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("PSO HLS Explorer — PSO-based architecture exploration for high-level synthesis")
+        self.setWindowTitle(f"{PROJECT_TITLE} — PSO HLS Explorer")
         self.resize(1440, 900)
         self.setMinimumSize(1180, 720)
         self.s = Session()
@@ -95,9 +101,9 @@ class MainWindow(QMainWindow):
         lay.addSpacing(12)
         t = QVBoxLayout()
         t.setSpacing(0)
-        t.addWidget(label("PSO HLS Explorer", "AppTitle"))
-        t.addWidget(label("Particle-swarm based architecture exploration · scheduling · register allocation · area–latency trade-off",
-                          "AppSub"))
+        t.addWidget(label(PROJECT_TITLE, "AppTitle", wrap=True))
+        t.addWidget(label("PSO HLS Explorer · PSO-based architecture exploration (Anshul & Sengupta, 2023) · "
+                          "scheduling · register allocation · area–latency trade-off", "AppSub", wrap=True))
         lay.addLayout(t, 1)
         lay.addWidget(button("Reset", "HeaderBtn", self.reset, "Start again from step 1"))
         return h
@@ -108,7 +114,7 @@ class MainWindow(QMainWindow):
         lay = QHBoxLayout(f)
         lay.setContentsMargins(20, 7, 20, 7)
         lay.addStretch(1)
-        lay.addWidget(label("<b>Made by</b> Devansh Singhal, Deepak Kumar, Dhristi, Kshaunish and Anshul Gupta",
+        lay.addWidget(label(f"<b>Made by</b> {TEAM} &nbsp;·&nbsp; <b>Supervisor</b> {SUPERVISOR}",
                             "FooterText", rich=True))
         lay.addStretch(1)
         return f

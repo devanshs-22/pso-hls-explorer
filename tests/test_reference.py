@@ -61,3 +61,26 @@ class ReferenceTool(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PaperTable3(unittest.TestCase):
+    """The five filters of Anshul & Sengupta (2023), written as DFGs in inputs/paper_filters/.
+    At the configuration the paper reports, area and latency must equal its Table 3."""
+    TABLE3 = {"BF": ((3, 1), 147.849, 927.399), "SF": ((4, 2), 243.79, 794.91),
+              "LED": ((2, 2), 199.75, 728.671), "VE": ((1, 1), 99.09, 596.185),
+              "HE": ((1, 1), 99.09, 596.185)}
+
+    def test_area_and_latency_match_table3(self):
+        for name, (pos, area, latency) in self.TABLE3.items():
+            ev = Evaluator(read_dfg(f"inputs/paper_filters/{name}.txt"),
+                           read_library(f"inputs/paper_filters/{name}_lib.txt"))
+            p = ev.evaluate(pos)
+            self.assertAlmostEqual(p.area, area, delta=0.005, msg=name)
+            self.assertAlmostEqual(p.latency, latency, delta=0.005, msg=name)
+
+    def test_sharpening_schedule_matches_fig3(self):
+        ev = Evaluator(read_dfg("inputs/paper_filters/SF.txt"), read_library("inputs/paper_filters/SF_lib.txt"))
+        p = ev.evaluate((4, 2))
+        self.assertEqual(p.schedule.steps, [[1, 2, 3, 4, 5, 10], [6, 7, 8, 9], [11, 12, 16, 17],
+                                            [13, 18], [14, 19], [15, 20]])
+        self.assertEqual(p.regs.n_registers, 22)          # 22 rows in Table 1 of the paper

@@ -364,7 +364,7 @@ function buildFrames(run) {
   const visited = new Set(H[0].particles.map(keyOf));
   const snap = () => lb.map((x) => ({ ...x }));
   const take = (pos, costs) => pos.forEach((p, i) => { visited.add(keyOf(p)); if (costs[i] < lb[i].cost) lb[i] = { pos: p, cost: costs[i] }; });
-  frames.push({ iter: 0, phase: "init", pos: H[0].particles, costs: H[0].costs, gbest: g, gcost: gc, improved: true, lb: snap(), visited: new Set(visited), stall });
+  frames.push({ iter: H[0].iteration, phase: "init", pos: H[0].particles, costs: H[0].costs, gbest: g, gcost: gc, improved: true, lb: snap(), visited: new Set(visited), stall });
   for (const it of H.slice(1)) {
     take(it.particles, it.costs);
     let g1 = g, gc1 = gc;
@@ -610,13 +610,13 @@ function drawConvergence() {
   const pad = (yhi - ylo) * 0.15 || 0.01;
   const yt = niceTicks(ylo - pad, yhi + pad, 4);
   ylo = yt[0]; yhi = yt[yt.length - 1];
-  const X = (v) => m.l + (v / xmax) * (W - m.l - m.r), Y = (v) => m.t + (1 - (v - ylo) / (yhi - ylo)) * (H - m.t - m.b);
+  const X = (v) => m.l + ((v - 1) / Math.max(xmax - 1, 1)) * (W - m.l - m.r), Y = (v) => m.t + (1 - (v - ylo) / (yhi - ylo)) * (H - m.t - m.b);  // iterations start at 1
   const ax = el("g", { cls: "ax" }, svg);
   yt.forEach((t) => {
     el("line", { x1: m.l, x2: W - m.r, y1: Y(t), y2: Y(t) }, ax);
     el("text", { x: m.l - 8, y: Y(t) + 4, "text-anchor": "end", text: fmt(t, 3) }, ax);
   });
-  niceTicks(0, xmax, 10).filter((t) => Number.isInteger(t) && t <= xmax).forEach((t) =>
+  [1, ...niceTicks(0, xmax, 10).filter((t) => Number.isInteger(t) && t > 1 && t <= xmax)].forEach((t) =>
     el("text", { x: X(t), y: H - m.b + 18, "text-anchor": "middle", text: t }, ax));
   el("line", { x1: X(xmax), x2: X(xmax), y1: m.t - 8, y2: H - m.b, style: { stroke: "var(--text-muted)", strokeDasharray: "4 4" } }, svg);
   el("text", { x: X(xmax) - 4, y: m.t - 12, "text-anchor": "end", cls: "lbl muted", text: `hard limit: ${xmax} iterations` }, svg);
@@ -624,7 +624,7 @@ function drawConvergence() {
   el("text", { x: 14, y: (m.t + H - m.b) / 2, "text-anchor": "middle", cls: "lbl", transform: `rotate(-90 14 ${(m.t + H - m.b) / 2})`, text: "best cost" }, svg);
   // whole line, revealed up to the current iteration through a clip rectangle
   const clipId = `convClip${S.runIdx}`;
-  const clip = el("rect", { x: 0, y: 0, width: X(0) + 6, height: H }, el("clipPath", { id: clipId }, el("defs", {}, svg)));
+  const clip = el("rect", { x: 0, y: 0, width: X(1) + 6, height: H }, el("clipPath", { id: clipId }, el("defs", {}, svg)));
   let d = `M${X(xs[0])},${Y(ys[0])}`;
   for (let i = 1; i < xs.length; i++) d += ` H${X(xs[i])} V${Y(ys[i])}`;
   el("path", { d, "clip-path": `url(#${clipId})`, style: { fill: "none", stroke: "var(--series-1)", strokeWidth: 2.5, strokeLinejoin: "round" } }, svg);

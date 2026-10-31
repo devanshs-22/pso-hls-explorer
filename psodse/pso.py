@@ -10,8 +10,12 @@ Fitness   = design cost of that configuration (Evaluator.evaluate, Eq. 5).
     then         velocity clamping, AETP (pull back inside the library limits),
                  mutation (even particle: left rotation, odd: +/- rand[1,3]),
                  AETP again, re-evaluate, update local/global best.
-    inertia w    decreases linearly 0.9 -> 0.1 over the iterations
+    inertia w    decreases linearly from 0.9 (by 0.8 / (max_iter - 1) per iteration)
     stop         global best unchanged for `stall_limit` (10) iterations, or 50 iterations.
+
+Iterations are numbered from 1, as in the paper: iteration 1 places and evaluates the
+initial swarm, and every later iteration is one velocity move plus one mutation. The
+limit of 50 iterations includes iteration 1.
 
 Convergence time  = time until the final global best was first found.
 Exploration time  = total time until the algorithm terminated.
@@ -114,17 +118,17 @@ class PSO:
         pts = [evaluate(p) for p in pos]
         lbest = list(pts)
         gbest = min(pts, key=lambda p: p.cost)
-        conv_iter, conv_time = 0, time.perf_counter() - t0
-        history = [dict(iteration=0, w=None, particles=[p.position for p in pts],
+        conv_iter, conv_time = 1, time.perf_counter() - t0
+        history = [dict(iteration=1, w=None, particles=[p.position for p in pts],
                         costs=[p.cost for p in pts], mutated=None, mutated_costs=None,
                         gbest=gbest.position, gbest_cost=gbest.cost,
                         elapsed_ms=conv_time * 1e3)]
 
-        stall, r, reason = 0, 0, f"reached max iterations ({cfg.max_iter})"
+        stall, r, reason = 0, 1, f"reached max iterations ({cfg.max_iter})"
         vmax = [hi - lo for lo, hi in zip(self.lo, self.hi)]
         while r < cfg.max_iter:
             r += 1
-            w = cfg.w_start - (cfg.w_start - cfg.w_end) * (r - 1) / max(cfg.max_iter - 1, 1)
+            w = cfg.w_start - (cfg.w_start - cfg.w_end) * (r - 2) / max(cfg.max_iter - 1, 1)
             improved = False
 
             def consider(i, p):

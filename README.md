@@ -1,6 +1,8 @@
 # PSO HLS Explorer
 
-**Made by Devansh Singhal, Deepak Kumar, Dhristi, Kshaunish and Anshul Gupta.**
+**Generation of Optimized Hardware Intellectual Property (IP) Designs for Consumer Electronics Applications**
+
+**Made by Devansh Singhal, Deepak Kumar, Dhristi and Kshaunish · Supervisor: Dr. Aditya Anshul.**
 
 PSO HLS Explorer is a desktop tool for high-level synthesis (HLS). You give it an
 algorithm written as a **data-flow graph** (a list of additions and multiplications) and a
@@ -173,8 +175,11 @@ negative is better**.
   then position `P = P + V`. Velocity clamping and AETP keep particles inside the
   library limits. Then **mutation**: even particles swap their adder and multiplier
   counts, odd particles jump ±1–3. Local and global bests are updated after both moves.
-- **Inertia ω** falls linearly from 0.9 to 0.1.
+- **Inertia ω** falls linearly from 0.9 toward 0.1 (by about 0.016 per iteration; about 0.12 at iteration 50).
 - **Stop:** after 50 iterations, or after 10 iterations in a row without improvement.
+- **Iteration numbers start at 1** (as in the paper's pseudo-code): iteration 1 places and
+  evaluates the initial swarm, and every later iteration is one velocity move plus one
+  mutation. The limit of 50 includes iteration 1.
 
 **Convergence time** is the time until the final best design was first found.
 **Exploration time** is the time until the search stopped.

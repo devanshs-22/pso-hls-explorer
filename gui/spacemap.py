@@ -250,7 +250,7 @@ class ConvergenceStrip(QWidget):
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         m_l, m_r, m_t, m_b = 64, 18, 22, 28
         W, H = self.width(), self.height()
-        X = lambda v: m_l + v / self.max_iter * (W - m_l - m_r)
+        X = lambda v: m_l + (v - 1) / max(self.max_iter - 1, 1) * (W - m_l - m_r)   # iterations 1..max
         Y = lambda v: m_t + (1 - (v - self.ylo) / (self.yhi - self.ylo)) * (H - m_t - m_b)
         f = QFont()
         f.setPixelSize(11)
@@ -261,7 +261,8 @@ class ConvergenceStrip(QWidget):
             p.drawLine(QPointF(m_l, Y(v)), QPointF(W - m_r, Y(v)))
             p.setPen(QColor(theme.INK_2))
             p.drawText(QRectF(0, Y(v) - 8, m_l - 8, 16), Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter, f"{v:.3f}")
-        for it in range(0, self.max_iter + 1, max(1, self.max_iter // 10)):
+        step = max(1, self.max_iter // 10)
+        for it in sorted({1, *range(step, self.max_iter + 1, step)}):
             p.drawText(QRectF(X(it) - 15, H - m_b + 6, 30, 14), Qt.AlignmentFlag.AlignCenter, str(it))
         p.setPen(QPen(QColor(theme.MUTED), 1, Qt.PenStyle.DashLine))
         p.drawLine(QPointF(X(self.max_iter), m_t - 6), QPointF(X(self.max_iter), H - m_b))

@@ -35,7 +35,7 @@ def build_frames(res):
     lb = [(tuple(p), c) for p, c in zip(H[0]["particles"], H[0]["costs"])]
     visited = {tuple(p) for p in H[0]["particles"]}
     g, gc, stall = tuple(H[0]["gbest"]), H[0]["gbest_cost"], 0
-    frames = [Frame(0, "init", None, [tuple(p) for p in H[0]["particles"]], list(H[0]["costs"]),
+    frames = [Frame(H[0]["iteration"], "init", None, [tuple(p) for p in H[0]["particles"]], list(H[0]["costs"]),
                     g, gc, True, 0, list(lb), set(visited))]
 
     def take(pos, costs):

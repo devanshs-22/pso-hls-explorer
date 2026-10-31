@@ -9,3 +9,4 @@ dist-portable/
 build-portable/
 .DS_Store
 windows_build/
+report/

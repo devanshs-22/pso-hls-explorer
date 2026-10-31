@@ -174,7 +174,7 @@ def fig_convergence(runs, title, stall_limit=10, max_iter=50):
         ax.annotate(f"best found at iteration {ci}", (ci, res.best.cost), xytext=(6, -16),
                     textcoords="offset points", fontsize=7.5, color=INK_2)
         ax.axvline(max_iter, color=INK_2, ls=":", lw=1)
-        ax.set_xlim(-0.5, max(max_iter, last) + 1)
+        ax.set_xlim(0.5, max(max_iter, last) + 1)
         ax.set_title(f"N = {n} particles", fontsize=10, loc="left")
         ax.set_xlabel("Iteration")
     axes[0].set_ylabel("Global best design cost")

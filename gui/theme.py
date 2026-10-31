@@ -62,7 +62,7 @@ QToolTip {{ background: #ffffff; color: {INK}; border: 1px solid {BORDER}; paddi
 /* header / footer */
 QFrame#Header {{ background: {NAVY}; }}
 QFrame#Header QLabel {{ color: #ffffff; }}
-QLabel#AppTitle {{ font-size: 19px; font-weight: 700; color: #ffffff; }}
+QLabel#AppTitle {{ font-size: 17px; font-weight: 700; color: #ffffff; }}
 QLabel#AppSub {{ font-size: 12px; color: #b9c6e4; }}
 QFrame#Footer {{ background: {NAVY}; }}
 QLabel#FooterText {{ color: #dfe6f5; font-size: 12px; }}

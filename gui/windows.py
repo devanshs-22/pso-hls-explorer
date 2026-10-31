@@ -586,8 +586,10 @@ class HelpWindow(OutputWindow):
         tb.setOpenExternalLinks(True)
         tb.setStyleSheet("QTextBrowser { background: #ffffff; border: 1px solid #dde2ea; border-radius: 12px; padding: 14px; }")
         tb.setHtml("""
-<h2 style="color:#14213d">PSO HLS Explorer</h2>
-<p><b>Made by</b> Devansh Singhal, Deepak Kumar, Dhristi, Kshaunish and Anshul Gupta.</p>
+<h2 style="color:#14213d">Generation of Optimized Hardware Intellectual Property (IP) Designs for Consumer
+Electronics Applications</h2>
+<p><b>PSO HLS Explorer</b> · <b>Made by</b> Devansh Singhal, Deepak Kumar, Dhristi and Kshaunish ·
+<b>Supervisor</b> Dr. Aditya Anshul.</p>
 <p>The tool takes an algorithm written as a <b>data-flow graph</b> (additions and multiplications) and a <b>library</b>
 of hardware units, and finds how many adders and multipliers the chip should have so that <b>chip area</b> and
 <b>speed (latency)</b> are best balanced. The search uses <b>particle swarm optimisation (PSO)</b> as described in
